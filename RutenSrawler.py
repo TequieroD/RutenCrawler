@@ -48,7 +48,7 @@ if userIDcheck(userID,head):
     if pagecount(userID,head):
         print u"ing...".encode(type)
         print u"######################################".encode(type)
-        workbook = xlsxwriter.Workbook(userID+'.csv')
+        workbook = xlsxwriter.Workbook('Result_'+userID+'.csv')
         worksheet = workbook.add_worksheet('Hyperlinks')
         n=0
         for i in range(pagecount(userID,head)):
@@ -56,18 +56,19 @@ if userIDcheck(userID,head):
             res = requests.get(url, headers = head)
             result = re.search('var f_list={"OrderList":(.*)?};',res.text)
             #print m.group(1)
-            regex = re.compile(r'\\(?![/u"])')
+            regex = re.compile(r'\\(,?![/u"])')
             result_data = regex.sub(r"\\\\", result.group(1))
             data = json.loads(result_data)
-            #print data
+            #count=1;
             for jdata in data:
                 if not jdata['user']:
                     jdata['user'] = ("不公開").decode('utf-8')
-                str = jdata['user'] + ',' + jdata['date'] + ',' + jdata['name'].encode('latin1', 'ignore').decode('big5') + ',' + jdata['money'].encode('latin1', 'ignore').decode('big5')
+                str = jdata['user'] + ',' + jdata['date'] + ',' + jdata['name'].encode('latin1', 'ignore').decode('hkscs') + ',' + jdata['money'].encode('latin1', 'ignore').decode('big5')
                 #print str
+                #worksheet.write(n,0,unicode(i)+"-"+unicode(count))
                 worksheet.write(n,0,str)
+                #count+=1
                 n+=1
         workbook.close()
-        print u"爬蟲完畢....請查看目錄底下".encode(type)
+        end = raw_input(u"爬蟲完畢....請查看目錄底下".encode(type))
         print u"######################################".encode(type)
-        end = raw_input(u'按任意鍵結束'.encode(type))
