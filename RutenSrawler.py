@@ -56,7 +56,7 @@ if userIDcheck(userID,head):
             res = requests.get(url, headers = head)
             result = re.search('var f_list={"OrderList":(.*)?};',res.text)
             #print m.group(1)
-            regex = re.compile(r'\\(,?![/u"])')
+            regex = re.compile(r'\\(?![/u"])')
             result_data = regex.sub(r"\\\\", result.group(1))
             data = json.loads(result_data)
             #count=1;
